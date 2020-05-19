@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS wayneEnterprise_DB;
-CREATE DATABASE wayneEnterprise_DB;
+DROP DATABASE IF EXISTS wayneEnterprises_DB;
+CREATE DATABASE wayneEnterprises_DB;
 
-USE wayneEnterprise_DB;
+USE wayneEnterprises_DB;
 
 CREATE TABLE department(
   id INT NOT NULL AUTO_INCREMENT,
@@ -18,7 +18,7 @@ CREATE TABLE roles(
   REFERECNCE department(id)
 );
 
-CREATE TABLE employee(
+CREATE TABLE employees(
   id INT NOT NULL AUTO_INCREMENT,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
