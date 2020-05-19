@@ -62,41 +62,128 @@ async function main() {
             type: 'list',
             message: 'Would you like the Batcomputer to do?',
             choices: ['View all W.E. employees', 
-            'View all W.E. employees by Department', 
-            'View all W.E. employees by Manager',
             'Add new W.E. employee',
             'Remove a W.E. employee',
             'Update a W.E. employee role',
-            'Update a W.E. employee manager'
+            'Nice talking Batcomputer, but Bruce just paged me'
             ]
         });
         
-        // Make a new auction item.
-        if (employee_tracker === 'POST') {
-            
-            // Describe the item.
-            const answers = await inquirer.prompt([
+        // Generate new user prompt
+        if (employee_tracker === 'Add new W.E. employee') {
+                            
+            const { addNewEmployee } = await inquirer.prompt([
                 {
-                    name: 'name',
+                    name: 'employeeFirstName',
                     type: 'input',
-                    message: 'Item name?',
+                    message: 'What is the first name of the new W.E employee?',
                 },
                 {
-                    name: 'price',
-                    type: 'number',
-                    message: 'Starting bid?',
+                    name: 'employeeLastName',
+                    type: 'input',
+                    message: 'What is the last name of the new W.E employee?',
                 },
                 {
-                    name: 'quantity',
-                    type: 'number',
-                    message: 'How many?',
+                    name: 'employeeDepartment',
+                    type: 'list',
+                    message: 'Which department do they work in?',
+                    choices: ['Engineering', 'Legal', 'Marketing', 'Public Relations']
+                },
+                {
+                    name: 'employeeTitle',
+                    type: 'input',
+                    message: 'What is the title of their new role?',
+                },
+                {
+                    name: '',
+                    type: 'input',
+                    message: 'What is the title of their new role?',
+                },
+                {
+                    name: 'employeeTitle',
+                    type: 'input',
+                    message: 'What is the title of their new role?',
                 }
             ]);
-            
+
+            await query (`INSERT INTO employees(first_namee, last_name) VALUES (?, ?)`, [answer.employeeFirstName, answer.employeeLastName, ]);
+
+            if (employee_tracker === 'View all W.E. employees') {
+
+                const { filterEmployee } = await inquirer.prompt(
+                    {
+                        name: 'filterEmployee',
+                        type: 'list',
+                        default: 'Department',
+                        message: 'How would you like me to filter W.E employees?',
+                        choices: ['Engineering', 'Legal', 'Markeeting', 'Public Relations']
+                    }
+                );
+                    if (filterEmployee === 'Engineering') {
+                        
+                        const answer = await inquirer.prompt([
+                            {
+                                name: 'name',
+                                type: 'input',
+                                message: 'Which department would you like',
+                            },
+                            {
+                                name: 'price',
+                                type: 'number',
+                                message: 'Starting bid?',
+                            },
+                            {
+                                name: 'quantity',
+                                type: 'number',
+                                message: 'How many?',
+                            }
+                        ]);
+                else if (employee_tracker === 'Update a W.E. employee role') {
+                            
+                            // Describe the item.
+                            const answers = await inquirer.prompt([
+                                {
+                                    name: 'name',
+                                    type: 'input',
+                                    message: 'Item name?',
+                                },
+                                {
+                                    name: 'price',
+                                    type: 'number',
+                                    message: 'Starting bid?',
+                                },
+                                {
+                                    name: 'quantity',
+                                    type: 'number',
+                                    message: 'How many?',
+                                }
+                            ]);
+
+                    // Make a new auction item.
+                        if (employee_tracker === 'Update a W.E. employee role') {
+                            
+                            // Describe the item.
+                            const answers = await inquirer.prompt([
+                                {
+                                    name: 'name',
+                                    type: 'input',
+                                    message: 'Item name?',
+                                },
+                                {
+                                    name: 'price',
+                                    type: 'number',
+                                    message: 'Starting bid?',
+                                },
+                                {
+                                    name: 'quantity',
+                                    type: 'number',
+                                    message: 'How many?',
+                                }
+                            ]);
+                    
             // Okay, let's create it in the database.
             await query(`
-                INSERT INTO items (name, price, quantity)
-                VALUES (?, ?, ?)`,
+                INSERT INTO items (name, price, quantity) VALUES (?, ?, ?)`,
                 [answers.name, answers.price, answers.quantity]
             );
             

@@ -1,3 +1,5 @@
+BEGIN;
+
 DROP DATABASE IF EXISTS wayneEnterprises_DB;
 CREATE DATABASE wayneEnterprises_DB;
 
@@ -15,7 +17,7 @@ CREATE TABLE roles(
   salary DECIMAL NOT NULL,
   PRIMARY KEY (id)
   FOREIGN KEY (department_id)
-  REFERECNCE department(id)
+  REFERECNCES department(id)
 );
 
 CREATE TABLE employees(
@@ -27,6 +29,8 @@ CREATE TABLE employees(
   FOREIGN KEY (manager_id),
   REFERECNCE department(id)
 );
+
+COMMIT;
 
 
 
