@@ -12,13 +12,12 @@ const consoleTable = requre('console.table');
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'zxcv1234',
+    password: 'ferris88',
     database: 'wayneEnterprises_DB',
 });
 
 // code snippet taken from Wk 12 activity 10:
 
-// Wrap connection.connect() in a promise!
 async function connect() {
     return new Promise((resolve, reject) => {
         connection.connect(err => {
@@ -28,7 +27,6 @@ async function connect() {
     })
 }
 
-// Wrap connection.query() in a promise!
 async function query(command, values) {
     return new Promise((resolve, reject) => {
         connection.query(command, values, (error, results) => {
@@ -55,12 +53,10 @@ async function main() {
     console.log("Houston..we have lift off!", connection.threadId);
     while (true) {
         
-        // What to do?
-        // Note we're using object-destructuring here ;)
         const { employee_tracker } = await inquirer.prompt({
             name: 'employee_tracker',
             type: 'list',
-            message: 'Would you like the Batcomputer to do?',
+            message: 'Hello Master Wayne. What would you like the Batcomputer to process?',
             choices: ['View all W.E. employees', 
             'Add new W.E. employee',
             'Remove a W.E. employee',
@@ -72,7 +68,7 @@ async function main() {
         // Generate new user prompt
         if (employee_tracker === 'Add new W.E. employee') {
                             
-            const { addNewEmployee } = await inquirer.prompt([
+            const answer = await inquirer.prompt([
                 {
                     name: 'employeeFirstName',
                     type: 'input',
@@ -108,6 +104,8 @@ async function main() {
 
             await query (`INSERT INTO employees(first_namee, last_name) VALUES (?, ?)`, [answer.employeeFirstName, answer.employeeLastName, ]);
 
+            console.log("new W.E employee added. Cross-checking against Gotham P.D database initiated");
+
             if (employee_tracker === 'View all W.E. employees') {
 
                 const { filterEmployee } = await inquirer.prompt(
@@ -116,7 +114,7 @@ async function main() {
                         type: 'list',
                         default: 'Department',
                         message: 'How would you like me to filter W.E employees?',
-                        choices: ['Engineering', 'Legal', 'Markeeting', 'Public Relations']
+                        choices: ['Engineering', 'Legal', 'Marketing', 'Public Relations']
                     }
                 );
                     if (filterEmployee === 'Engineering') {
@@ -137,7 +135,7 @@ async function main() {
                                 type: 'number',
                                 message: 'How many?',
                             }
-                        ]);
+                        ])}
                 else if (employee_tracker === 'Update a W.E. employee role') {
                             
                             // Describe the item.
@@ -182,8 +180,7 @@ async function main() {
                             ]);
                     
             // Okay, let's create it in the database.
-            await query(`
-                INSERT INTO items (name, price, quantity) VALUES (?, ?, ?)`,
+            await query(`INSERT INTO items (name, price, quantity) VALUES (?, ?, ?)`,
                 [answers.name, answers.price, answers.quantity]
             );
             
@@ -196,12 +193,7 @@ async function main() {
             
             // This a bit cheeky, I've renamed id -> value because inquirer can use
             // a name/value pair in its 'choices' field.
-            const items = await query(`
-                SELECT
-                    id AS value,
-                    name
-                FROM items
-            `);
+            const items = await query(`SELECT id AS value, name FROM items`);
             
             // What if there's nothing to bid on?
             if (items.length === 0) {
@@ -228,12 +220,7 @@ async function main() {
             
             // Let's update the item, but only if the new bid is _greater_ than
             // the existing price.
-            const result = await query(`
-                UPDATE items
-                    SET price = ?
-                WHERE id = ?
-                    AND ? > price
-            `, [answers.bid, answers.item, answers.bid]);
+            const result = await query(`UPDATE items SET price = ? WHERE id = ? AND ? > price`, [answers.bid, answers.item, answers.bid]);
             
             // Remember that INSERT/UPDATE/DELETE doesn't return a table of rows.
             // Instead they return an 'OK' status.
@@ -260,8 +247,7 @@ async function main() {
     connection.end();
 }
 
+
 // Start the app.
 main().catch(err => console.log(err));
-
-
-
+        
