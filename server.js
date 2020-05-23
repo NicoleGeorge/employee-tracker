@@ -5,7 +5,7 @@ const utils = require('util');
 const figlet = require("figlet");
 const clear = require("clear");
 const chalk = require("chalk");
-const consoleTable = requre('console.table');
+const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/employee');
 
 // Databse connection
 
@@ -26,6 +26,9 @@ async function connect() {
         })
     })
 }
+connection.queryPromise = function(command, values){
+
+}
 
 async function query(command, values) {
     return new Promise((resolve, reject) => {
@@ -41,11 +44,62 @@ async function query(command, values) {
 clear();
 
 console.log(
-  chalk.bgGreenBright(
+  chalk.greenBright(
     figlet.textSync("WAYNE Enterprises", { horizonatalLayout: "full" })
   )
 );
 
+
+async function addNewEmployee(){
+    const answer = await inquirer.prompt([
+        {
+            name: 'employeeFirstName',
+            type: 'input',
+            message: 'What is the first name of the new W.E employee?',
+        },
+        {
+            name: 'employeeLastName',
+            type: 'input',
+            message: 'What is the last name of the new W.E employee?',
+        },
+        {
+            name: 'employeeDepartment',
+            type: 'list',
+            message: 'Which department do they work in?',
+            choices: ['Engineering', 'Legal', 'Marketing', 'Public Relations']
+        },
+        {
+            name: 'employeeTitle',
+            type: 'input',
+            message: 'What is the title of their new role?',
+        },
+        {
+            name: '',
+            type: 'input',
+            message: 'What is the title of their new role?',
+        },
+        {
+            name: 'employeeTitle',
+            type: 'input',
+            message: 'What is the title of their new role?',
+        }
+    ]);
+
+    await query (`INSERT INTO employees(first_name, last_name) VALUES (?, ?)`, [answer.employeeFirstName, answer.employeeLastName, ]);
+    console.log("new W.E employee added. Cross-checking against Gotham P.D database initiated");
+
+}
+
+
+       
+// Okay, let's create it in the database.
+await query(`INSERT INTO items (name, price, quantity) VALUES (?, ?, ?)`,
+    [answers.name, answers.price, answers.quantity]
+);
+
+// TODO We should really check first whether the query worked or not.
+console.log("Great, it's now on auction.\n");
+}
 // START: Main program details
 async function main() {
     
@@ -67,127 +121,22 @@ async function main() {
         
         // Generate new user prompt
         if (employee_tracker === 'Add new W.E. employee') {
-                            
-            const answer = await inquirer.prompt([
-                {
-                    name: 'employeeFirstName',
-                    type: 'input',
-                    message: 'What is the first name of the new W.E employee?',
-                },
-                {
-                    name: 'employeeLastName',
-                    type: 'input',
-                    message: 'What is the last name of the new W.E employee?',
-                },
-                {
-                    name: 'employeeDepartment',
-                    type: 'list',
-                    message: 'Which department do they work in?',
-                    choices: ['Engineering', 'Legal', 'Marketing', 'Public Relations']
-                },
-                {
-                    name: 'employeeTitle',
-                    type: 'input',
-                    message: 'What is the title of their new role?',
-                },
-                {
-                    name: '',
-                    type: 'input',
-                    message: 'What is the title of their new role?',
-                },
-                {
-                    name: 'employeeTitle',
-                    type: 'input',
-                    message: 'What is the title of their new role?',
-                }
-            ]);
+            await addNewEmployee()
+        }       
+ 
 
-            await query (`INSERT INTO employees(first_namee, last_name) VALUES (?, ?)`, [answer.employeeFirstName, answer.employeeLastName, ]);
 
-            console.log("new W.E employee added. Cross-checking against Gotham P.D database initiated");
-
-            if (employee_tracker === 'View all W.E. employees') {
-
-                const { filterEmployee } = await inquirer.prompt(
-                    {
-                        name: 'filterEmployee',
-                        type: 'list',
-                        default: 'Department',
-                        message: 'How would you like me to filter W.E employees?',
-                        choices: ['Engineering', 'Legal', 'Marketing', 'Public Relations']
-                    }
-                );
-                    if (filterEmployee === 'Engineering') {
-                        
-                        const answer = await inquirer.prompt([
-                            {
-                                name: 'name',
-                                type: 'input',
-                                message: 'Which department would you like',
-                            },
-                            {
-                                name: 'price',
-                                type: 'number',
-                                message: 'Starting bid?',
-                            },
-                            {
-                                name: 'quantity',
-                                type: 'number',
-                                message: 'How many?',
-                            }
-                        ])}
-                else if (employee_tracker === 'Update a W.E. employee role') {
-                            
-                            // Describe the item.
-                            const answers = await inquirer.prompt([
-                                {
-                                    name: 'name',
-                                    type: 'input',
-                                    message: 'Item name?',
-                                },
-                                {
-                                    name: 'price',
-                                    type: 'number',
-                                    message: 'Starting bid?',
-                                },
-                                {
-                                    name: 'quantity',
-                                    type: 'number',
-                                    message: 'How many?',
-                                }
-                            ]);
-
-                    // Make a new auction item.
-                        if (employee_tracker === 'Update a W.E. employee role') {
-                            
-                            // Describe the item.
-                            const answers = await inquirer.prompt([
-                                {
-                                    name: 'name',
-                                    type: 'input',
-                                    message: 'Item name?',
-                                },
-                                {
-                                    name: 'price',
-                                    type: 'number',
-                                    message: 'Starting bid?',
-                                },
-                                {
-                                    name: 'quantity',
-                                    type: 'number',
-                                    message: 'How many?',
-                                }
-                            ]);
-                    
-            // Okay, let's create it in the database.
-            await query(`INSERT INTO items (name, price, quantity) VALUES (?, ?, ?)`,
-                [answers.name, answers.price, answers.quantity]
-            );
-            
-            // TODO We should really check first whether the query worked or not.
-            console.log("Great, it's now on auction.\n");
+        if (employee_tracker === 'View all W.E. employees') {
+            await viewAllEmployees();
+      
         }
-        
+
+        if (employee_tracker === 'Update a W.E. employee role') {
+            await updateEmployee();
+        }
+        if (employee_tracker === 'Update a W.E. employee role') {
+            await updateEmployeeRole();
+        }
         // Bid on an item.
         else if (employee_tracker === 'BID') {
             
