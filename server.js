@@ -71,9 +71,9 @@ async function main() {
             ]
         });
         
-        // Generate new user prompt
+        // Add new user prompts
         if (employee_tracker === 'Add new W.E. employee') {
-            await addNewEmployee()
+            await addNewEmployee();
         }       
 
         if (employee_tracker === 'View all W.E. employees') {
@@ -87,39 +87,8 @@ async function main() {
             await updateEmployeeRole();
         }
 
-        // Bid on an item.
-        else if (employee_tracker === 'BID') {
-            
-            // This a bit cheeky, I've renamed id -> value because inquirer can use
-            // a name/value pair in its 'choices' field.
-            const items = await query(`SELECT id AS value, name FROM items`);
-            
-            // What if there's nothing to bid on?
-            if (items.length === 0) {
-                console.log("There's nothing to bid on, how about POSTing an item?\n");
-                
-                // For those perplexed, this will shortcut to the top of the loop.
-                continue;
-            }
-            
-            
-            // Let's update the item, but only if the new bid is _greater_ than
-            // the existing price.
-            const result = await query(`UPDATE items SET price = ? WHERE id = ? AND ? > price`, [answers.bid, answers.item, answers.bid]);
-            
-            // Remember that INSERT/UPDATE/DELETE doesn't return a table of rows.
-            // Instead they return an 'OK' status.
-            
-            if (result.changedRows === 1) {
-                // It updated, so therefore we have a bigger bid!
-                console.log("Congrats! You are now the highest bidder.\n");
-            }
-            else {
-                // In this case because we haven't updated anything we can assert that
-                // the new bid was not bigger than the existing price.
-                console.log(`Sorry, the current bid is bigger than ${answers.bid}.\n`);
-            }
-        }
+        // View Employees
+
         
         // If it's not POST or BID, then it _must_ be EXIT.
         else {

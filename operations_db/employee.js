@@ -24,16 +24,6 @@ async function addNewEmployee(){
             type: 'input',
             message: 'What is the title of their new role?',
         },
-        {
-            name: '',
-            type: 'input',
-            message: 'What is the title of their new role?',
-        },
-        {
-            name: 'employeeTitle',
-            type: 'input',
-            message: 'What is the title of their new role?',
-        }
     ]);
 
     await query (`INSERT INTO employees(first_name, last_name) VALUES (?, ?)`, [answer.employeeFirstName, answer.employeeLastName, ]);
