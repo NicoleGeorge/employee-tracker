@@ -5,9 +5,9 @@ const utils = require('util');
 const figlet = require("figlet");
 const clear = require("clear");
 const chalk = require("chalk");
-const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/employee');
-const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/departmet');
-const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/roles');
+const {addNewEmployee, viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/employee');
+// const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/departmet');
+// const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/roles');
 
 // Databse connection
 
@@ -50,48 +50,6 @@ console.log(
     figlet.textSync("WAYNE Enterprises", { horizonatalLayout: "full" })
   )
 );
-
-
-async function addNewEmployee(){
-    const answer = await inquirer.prompt([
-        {
-            name: 'employeeFirstName',
-            type: 'input',
-            message: 'What is the first name of the new W.E employee?',
-        },
-        {
-            name: 'employeeLastName',
-            type: 'input',
-            message: 'What is the last name of the new W.E employee?',
-        },
-        {
-            name: 'employeeDepartment',
-            type: 'list',
-            message: 'Which department do they work in?',
-            choices: ['Engineering', 'Legal', 'Marketing', 'Public Relations']
-        },
-        {
-            name: 'employeeTitle',
-            type: 'input',
-            message: 'What is the title of their new role?',
-        },
-        {
-            name: '',
-            type: 'input',
-            message: 'What is the title of their new role?',
-        },
-        {
-            name: 'employeeTitle',
-            type: 'input',
-            message: 'What is the title of their new role?',
-        }
-    ]);
-
-    await query (`INSERT INTO employees(first_name, last_name) VALUES (?, ?)`, [answer.employeeFirstName, answer.employeeLastName, ]);
-    console.log("new W.E employee added. Cross-checking against Gotham P.D database initiated");
-
-}
-
 
 // START: Main program details
 async function main() {
