@@ -6,6 +6,8 @@ const figlet = require("figlet");
 const clear = require("clear");
 const chalk = require("chalk");
 const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/employee');
+const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/departmet');
+const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/roles');
 
 // Databse connection
 
@@ -91,15 +93,6 @@ async function addNewEmployee(){
 }
 
 
-       
-// Okay, let's create it in the database.
-await query(`INSERT INTO items (name, price, quantity) VALUES (?, ?, ?)`,
-    [answers.name, answers.price, answers.quantity]
-);
-
-// TODO We should really check first whether the query worked or not.
-console.log("Great, it's now on auction.\n");
-}
 // START: Main program details
 async function main() {
     
@@ -111,11 +104,12 @@ async function main() {
             name: 'employee_tracker',
             type: 'list',
             message: 'Hello Master Wayne. What would you like the Batcomputer to process?',
-            choices: ['View all W.E. employees', 
-            'Add new W.E. employee',
-            'Remove a W.E. employee',
+            choices: ['Add new W.E. employee',
+            'View all W.E. employees', 
             'Update a W.E. employee role',
-            'Nice talking Batcomputer, but Bruce just paged me'
+            'Remove a W.E. employee',
+            // exit the program command below
+            'Gotta go Batcomputer, Commissioner Gordon just activated the Bat Signal'
             ]
         });
         
@@ -123,12 +117,9 @@ async function main() {
         if (employee_tracker === 'Add new W.E. employee') {
             await addNewEmployee()
         }       
- 
-
 
         if (employee_tracker === 'View all W.E. employees') {
             await viewAllEmployees();
-      
         }
 
         if (employee_tracker === 'Update a W.E. employee role') {
@@ -137,6 +128,7 @@ async function main() {
         if (employee_tracker === 'Update a W.E. employee role') {
             await updateEmployeeRole();
         }
+
         // Bid on an item.
         else if (employee_tracker === 'BID') {
             
@@ -152,20 +144,6 @@ async function main() {
                 continue;
             }
             
-            // Ask away.
-            const answers = await inquirer.prompt([
-                {
-                    name: 'item',
-                    type: 'list',
-                    message: 'What do you want to bid on?',
-                    choices: items,
-                },
-                {
-                    name: 'bid',
-                    type: 'number',
-                    message: 'How much is your bid?',
-                }
-            ]);
             
             // Let's update the item, but only if the new bid is _greater_ than
             // the existing price.

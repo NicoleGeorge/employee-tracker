@@ -13,26 +13,28 @@ async function viewAllEmployees(){
     );
         if (filterEmployee === 'Engineering') {
             
-            const engineering = await query(`SELECT * FROM Engineering`);
-            console.table(engineering);
-        }
-        if (filterEmployee === 'Legal') {
-            const legal = await query(`SELECT * FROM Legal`);
-            console.table(legal);
-        }
-        if (filterEmployee === 'Marketing') {
-            const marketing = await query(`SELECT * FROM Marketing`);
-            console.table(marketing);
-        }
-        if (filterEmployee === 'Public Relations') {
-            const pr = await query(`SELECT * FROM Public Relations`);
-            console.table(pr);
-        }
+            const answer = await inquirer.prompt([
+                {
+                    name: 'name',
+                    type: 'input',
+                    message: 'Which department would you like',
+                },
+                {
+                    name: 'price',
+                    type: 'number',
+                    message: 'Starting bid?',
+                },
+                {
+                    name: 'quantity',
+                    type: 'number',
+                    message: 'How many?',
+                }
+            ])}
 }
 
 async function updateEmployee() {
-
-    const answer = await inquirer.prompt([
+ // Describe the item.
+    const answers = await inquirer.prompt([
         {
             name: 'name',
             type: 'input',
@@ -52,11 +54,11 @@ async function updateEmployee() {
 }
 
 async function updateEmployeeRole() {
-    const answer = await inquirer.prompt([
+    const answers = await inquirer.prompt([
         {
-            name: 'id',
-            type: 'list',
-            message: 'Please specify which W.E Role you would like to update?',
+            name: 'name',
+            type: 'input',
+            message: 'Item name?',
         },
         {
             name: 'price',
