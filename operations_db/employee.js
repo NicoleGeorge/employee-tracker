@@ -26,7 +26,7 @@ async function addNewEmployee(){
         },
     ]);
 
-    await query (`INSERT INTO employees(first_name, last_name) VALUES (?, ?)`, [answer.employeeFirstName, answer.employeeLastName, ]);
+    await query (`INSERT INTO employees(first_name, last_name) VALUES (?, ?)`, [answer.employeeFirstName, answer.employeeLastName, answer.employeeDepartment, answer.employeeTitle]);
     console.log("new W.E employee added. Cross-checking against Gotham P.D database initiated");
 
 }

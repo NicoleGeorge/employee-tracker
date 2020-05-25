@@ -16,7 +16,7 @@ async function addNewDepartment(){
 }
 
 async function viewDepartments(){
-    const { viewDepartment } = await inquirer.prompt(
+    const { filterDepartment } = await inquirer.prompt(
         {
             name: 'filterDepartments',
             type: 'list',
@@ -25,31 +25,31 @@ async function viewDepartments(){
             choices: ['Engineering', 'Legal', 'Marketing', 'Public Relations']
         }
     );
-    if (viewDepartment === 'Engineering') {
+    if (filterDepartment === 'Engineering') {
             
-        const engineering = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.viewDepartment]);
+        const engineering = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.filterDepartment]);
         console.table(engineering);
         console.log("You are now viewing all W.E employees within the Engineering department");
     }
-    if (viewDepartment === 'Legal') {
-        const legal = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.viewDepartment]);
+    if (filterDepartment === 'Legal') {
+        const legal = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.filterDepartment]);
         console.table(legal);
         console.log("You are now viewing all W.E employees within the Legal department");
     }
-    if (viewDepartment === 'Marketing') {
-        const marketing = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.viewDepartment]);
+    if (filterDepartment === 'Marketing') {
+        const marketing = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.filterDepartment]);
         console.table(marketing);
         console.log("You are now viewing all W.E employees within the Marketing department");
     }
-    if (viewDepartment === 'Public Relations') {
-        const pr = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.viewDepartment]);
+    if (filterDepartment === 'Public Relations') {
+        const pr = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.filterDepartment]);
         console.table(pr);
         console.log("You are now viewing all W.E employees within the P.R department");
     }
 }
 
 async function updateDepartment() {
- // Describe the item.
+ // TODO - pull reference points from data table and update details
     const answers = await inquirer.prompt([
         {
             name: 'name',
@@ -68,9 +68,6 @@ async function updateDepartment() {
         }
     ]);
 }
-
-
-
 
 module.exports = {
     viewDepartments: viewDepartments,
