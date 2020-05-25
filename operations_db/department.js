@@ -1,82 +1,79 @@
 
 const inquirer = require('inquirer');
 
-async function viewAllEmployees(){
-    const { filterEmployee } = await inquirer.prompt(
+async function addNewDepartment(){
+    const answer = await inquirer.prompt([
         {
-            name: 'filterEmployee',
+            name: 'departmentName',
+            type: 'input',
+            message: 'What is the name of the new W.E department?',
+        },
+    ]);
+
+    await query (`INSERT INTO department(name) VALUES (?)`, [answer.departmentName]);
+    console.log("new W.E department added. Scanning internal employee database for a suitable department head");
+
+}
+
+async function viewDepartments(){
+    const { viewDepartment } = await inquirer.prompt(
+        {
+            name: 'filterDepartments',
             type: 'list',
-            default: 'Department',
-            message: 'How would you like me to filter W.E employees?',
+            default: 'Engineering',
+            message: 'Which department would you like to view?',
             choices: ['Engineering', 'Legal', 'Marketing', 'Public Relations']
         }
     );
-        if (filterEmployee === 'Engineering') {
+    if (viewDepartment === 'Engineering') {
             
-            const answer = await inquirer.prompt([
-                {
-                    name: 'name',
-                    type: 'input',
-                    message: 'Which department would you like',
-                },
-                {
-                    name: 'price',
-                    type: 'number',
-                    message: 'Starting bid?',
-                },
-                {
-                    name: 'quantity',
-                    type: 'number',
-                    message: 'How many?',
-                }
-            ])}
+        const engineering = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.viewDepartment]);
+        console.table(engineering);
+        console.log("You are now viewing all W.E employees within the Engineering department");
+    }
+    if (viewDepartment === 'Legal') {
+        const legal = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.viewDepartment]);
+        console.table(legal);
+        console.log("You are now viewing all W.E employees within the Legal department");
+    }
+    if (viewDepartment === 'Marketing') {
+        const marketing = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.viewDepartment]);
+        console.table(marketing);
+        console.log("You are now viewing all W.E employees within the Marketing department");
+    }
+    if (viewDepartment === 'Public Relations') {
+        const pr = await query(`SELECT * FROM department(name) VALUES(?)`, [answer.viewDepartment]);
+        console.table(pr);
+        console.log("You are now viewing all W.E employees within the P.R department");
+    }
 }
 
-async function updateEmployee() {
+async function updateDepartment() {
  // Describe the item.
     const answers = await inquirer.prompt([
         {
             name: 'name',
             type: 'input',
-            message: 'Item name?',
+            message: '',
         },
         {
-            name: 'price',
-            type: 'number',
-            message: 'Starting bid?',
+            name: 'name',
+            type: 'input',
+            message: '',
         },
         {
-            name: 'quantity',
-            type: 'number',
-            message: 'How many?',
+            name: 'name',
+            type: 'input',
+            message: '',
         }
     ]);
 }
 
-async function updateEmployeeRole() {
-    const answers = await inquirer.prompt([
-        {
-            name: 'name',
-            type: 'input',
-            message: 'Item name?',
-        },
-        {
-            name: 'price',
-            type: 'number',
-            message: 'Starting bid?',
-        },
-        {
-            name: 'quantity',
-            type: 'number',
-            message: 'How many?',
-        }
-    ]);
-}
 
 
 
 module.exports = {
-    updateEmployee: updateEmployee,
-    updateEmployeeRole: updateEmployeeRole,
-    viewAllEmployees: viewAllEmployees
+    viewDepartments: viewDepartments,
+    addNewDepartment: addNewDepartment,
+    updateDepartment: updateDepartment
 }

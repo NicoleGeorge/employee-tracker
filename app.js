@@ -6,7 +6,7 @@ const figlet = require("figlet");
 const clear = require("clear");
 const chalk = require("chalk");
 const {addNewEmployee, viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/employee');
-// const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/departmet');
+const {viewDepartments, addNewDepartment, updateEmployeeRole} = require('./operations_db/departmet');
 // const {viewAllEmployees, updateEmployee, updateEmployeeRole} = require('./operations_db/roles');
 
 // Databse connection
@@ -80,15 +80,28 @@ async function main() {
             await viewAllEmployees();
         }
 
-        if (employee_tracker === 'Update a W.E. employee role') {
+        if (employee_tracker === 'Update a W.E. employee') {
             await updateEmployee();
         }
         if (employee_tracker === 'Update a W.E. employee role') {
             await updateEmployeeRole();
         }
 
-        // View Employees
+        // View Departments
+        if (employee_tracker === 'Add new W.E. employee') {
+            await viewDepartments();
+        }       
 
+        if (employee_tracker === 'View all W.E. employees') {
+            await addNewDepartment();
+        }
+
+        if (employee_tracker === 'Update a W.E. employee role') {
+            await updateEmployee();
+        }
+        if (employee_tracker === 'Update a W.E. employee role') {
+            await updateEmployeeRole();
+        }
         
         // If it's not POST or BID, then it _must_ be EXIT.
         else {
